@@ -61,6 +61,10 @@ pub struct WindowConfig {
 
     /// System decorations theme variant.
     decorations_theme_variant: Option<Theme>,
+
+    /// Use sRGB color space.
+    #[cfg(target_os = "macos")]
+    pub use_srgb: bool,
 }
 
 impl Default for WindowConfig {
@@ -80,6 +84,8 @@ impl Default for WindowConfig {
             resize_increments: Default::default(),
             decorations_theme_variant: Default::default(),
             option_as_alt: Default::default(),
+            #[cfg(target_os = "macos")]
+            use_srgb: true,
         }
     }
 }
