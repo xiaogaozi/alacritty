@@ -588,11 +588,10 @@ impl Display {
         });
     }
 
+    // XXX: this function must not call to any `OpenGL` related tasks. Renderer updates are
+    // performed in [`Self::process_renderer_update`] right befor drawing.
+    //
     /// Process update events.
-    ///
-    /// XXX: this function must not call to any `OpenGL` related tasks. Only logical update
-    /// of the state is being performed here. Rendering update takes part right before the
-    /// actual rendering.
     pub fn handle_update<T>(
         &mut self,
         terminal: &mut Term<T>,
@@ -666,14 +665,11 @@ impl Display {
         self.size_info = new_size;
     }
 
+    // NOTE: Renderer updates are split off, since platforms like Wayland require resize and other
+    // OpenGL operations to be performed right before rendering. Otherwise they could lock the
+    // back buffer and render with the previous state. This also solves flickering during resizes.
+    //
     /// Update the state of the renderer.
-    ///
-    /// NOTE: The update to the renderer is split from the display update on purpose, since
-    /// on some platforms, like Wayland, resize and other OpenGL operations must be performed
-    /// right before rendering, otherwise they could lock the back buffer resulting in
-    /// rendering with the buffer of old size.
-    ///
-    /// This also resolves any flickering, since the resize is now synced with frame callbacks.
     pub fn process_renderer_update(&mut self) {
         let renderer_update = match self.pending_renderer_update.take() {
             Some(renderer_update) => renderer_update,
@@ -1205,10 +1201,9 @@ impl Display {
         // The maximum amount of protected lines including the ones we'll show preview on.
         let max_protected_lines = uris.len() * 2;
 
-        // Lines we shouldn't shouldn't show preview on, because it'll obscure the highlighted
-        // hint.
+        // Lines we shouldn't show preview on, because it'll obscure the highlighted hint.
         let mut protected_lines = Vec::with_capacity(max_protected_lines);
-        if self.size_info.screen_lines() >= max_protected_lines {
+        if self.size_info.screen_lines() > max_protected_lines {
             // Prefer to show preview even when it'll likely obscure the highlighted hint, when
             // there's no place left for it.
             protected_lines.push(self.hint_mouse_point.map(|point| point.line));

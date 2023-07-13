@@ -796,7 +796,7 @@ impl<'a, N: Notify + 'a, T: EventListener> input::ActionContext<T> for ActionCon
             // We remove `\x1b` to ensure it's impossible for the pasted text to write the bracketed
             // paste end escape `\x1b[201~` and `\x03` since some shells incorrectly terminate
             // bracketed paste on its receival.
-            let filtered = text.replace('\x1b', "").replace('\x03', "");
+            let filtered = text.replace(['\x1b', '\x03'], "");
             self.write_to_pty(filtered.into_bytes());
 
             self.write_to_pty(&b"\x1b[201~"[..]);
@@ -1179,16 +1179,22 @@ impl input::Processor<EventProxy, ActionContext<'_, Notifier, EventProxy>> {
         match event {
             WinitEvent::UserEvent(Event { payload, .. }) => match payload {
                 EventType::ScaleFactorChanged(scale_factor, (width, height)) => {
+                    self.ctx.window().scale_factor = scale_factor;
+
                     let display_update_pending = &mut self.ctx.display.pending_update;
 
                     // Push current font to update its scale factor.
                     let font = self.ctx.config.font.clone();
                     display_update_pending.set_font(font.with_size(*self.ctx.font_size));
 
-                    // Resize to event's dimensions, since no resize event is emitted on Wayland.
-                    display_update_pending.set_dimensions(PhysicalSize::new(width, height));
-
-                    self.ctx.window().scale_factor = scale_factor;
+                    // Ignore resize events to zero in any dimension, to avoid issues with Winit
+                    // and the ConPTY. A 0x0 resize will also occur when the window is minimized
+                    // on Windows.
+                    if width != 0 && height != 0 {
+                        // Resize to event's dimensions, since no resize event is emitted on
+                        // Wayland.
+                        display_update_pending.set_dimensions(PhysicalSize::new(width, height));
+                    }
                 },
                 EventType::Frame => {
                     self.ctx.display.window.has_frame.store(true, Ordering::Relaxed);
