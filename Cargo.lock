@@ -10,7 +10,7 @@ checksum = "f26201604c87b1e01bd3d98f8d5d9a8fcbb815e8cedb41ffccbeb4bf593a35fe"
 
 [[package]]
 name = "alacritty"
-version = "0.12.1"
+version = "0.12.2"
 dependencies = [
  "alacritty_config",
  "alacritty_config_derive",
@@ -70,7 +70,7 @@ dependencies = [
 
 [[package]]
 name = "alacritty_terminal"
-version = "0.19.0"
+version = "0.19.1"
 dependencies = [
  "alacritty_config",
  "alacritty_config_derive",
@@ -698,9 +698,9 @@ dependencies = [
 
 [[package]]
 name = "glutin"
-version = "0.30.8"
+version = "0.30.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "62f9b771a65f0a1e3ddb6aa16f867d87dc73c922411c255e6c4ab7f6d45c7327"
+checksum = "23b0385782048be65f0a9dd046c469d6a758a53fe1aa63a8111dea394d2ffa2f"
 dependencies = [
  "bitflags",
  "cfg_aliases",

@@ -5,6 +5,15 @@ The sections should follow the order `Packaging`, `Added`, `Changed`, `Fixed` an
 
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/).
 
+## 0.12.2
+
+### Fixed
+
+- Hyperlink preview not being shown when the terminal has exactly 2 lines
+- Crash on Windows when changing display scale factor
+- Freeze with some drivers when using GLX
+- Crash when shrinking the terminal scrolled into the history
+
 ## 0.12.1
 
 ### Fixed
