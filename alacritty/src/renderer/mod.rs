@@ -71,9 +71,6 @@ impl fmt::Display for Error {
             Error::Other(err) => {
                 write!(f, "{err}")
             },
-            Error::Other(err) => {
-                write!(f, "{}", err)
-            },
         }
     }
 }

@@ -80,8 +80,6 @@ impl Default for WindowConfig {
             resize_increments: Default::default(),
             decorations_theme_variant: Default::default(),
             option_as_alt: Default::default(),
-            #[cfg(target_os = "macos")]
-            use_srgb: true,
         }
     }
 }

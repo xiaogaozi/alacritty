@@ -135,15 +135,6 @@ impl UiConfig {
 
     /// Generate key bindings for all keyboard hints.
     pub fn generate_hint_bindings(&mut self) {
-        // Check which key bindings is most likely to be the user's configuration.
-        //
-        // Both will be non-empty due to the presence of the default keybindings.
-        let key_bindings = if let Some(key_bindings) = self.key_bindings.as_mut() {
-            &mut key_bindings.0
-        } else {
-            &mut self.keyboard.bindings.0
-        };
-
         for hint in &self.hints.enabled {
             let binding = match &hint.binding {
                 Some(binding) => binding,
