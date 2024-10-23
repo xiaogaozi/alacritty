@@ -61,10 +61,6 @@ pub struct WindowConfig {
 
     /// System decorations theme variant.
     decorations_theme_variant: Option<Theme>,
-
-    /// Use sRGB color space.
-    #[cfg(target_os = "macos")]
-    pub use_srgb: bool,
 }
 
 impl Default for WindowConfig {
