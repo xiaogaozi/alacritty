@@ -64,6 +64,10 @@ pub struct WindowConfig {
 
     /// Window level.
     pub level: WindowLevel,
+
+    /// Use sRGB color space.
+    #[cfg(target_os = "macos")]
+    pub use_srgb: bool,
 }
 
 impl Default for WindowConfig {
@@ -84,6 +88,8 @@ impl Default for WindowConfig {
             decorations_theme_variant: Default::default(),
             option_as_alt: Default::default(),
             level: Default::default(),
+            #[cfg(target_os = "macos")]
+            use_srgb: true,
         }
     }
 }

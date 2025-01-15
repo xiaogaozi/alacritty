@@ -192,7 +192,9 @@ impl Window {
         window.set_transparent(config.window_opacity() < 1.);
 
         #[cfg(target_os = "macos")]
-        use_srgb_color_space(&window);
+        if config.window.use_srgb {
+            use_srgb_color_space(&window);
+        }
 
         let scale_factor = window.scale_factor();
         log::info!("Window scale factor: {}", scale_factor);
